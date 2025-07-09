@@ -50,7 +50,7 @@ import {
   scrollToEnd,
   scrollToText,
   scrollToBeginning,
-} from "../../../utils/scroll";
+} from "../../utils/scroll.js";
 
 describe("Scroll Testes", () => {
   beforeEach(async () => {
