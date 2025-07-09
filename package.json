@@ -8,7 +8,7 @@
     "appium": "appium",
     "ios": "wdio run configs/wdio.ios.conf.js",
     "android": "wdio run configs/wdio.android.conf.js",
-    "bs-android": "wdio run configs/wdio.browserstack.conf.js",
+    "bs-android": "wdio run configs/wdio.android.browserstack.conf.js",
     "wdio": "wdio run ./wdio.conf.js"
   },
   "keywords": [],
