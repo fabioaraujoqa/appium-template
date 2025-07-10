@@ -1,4 +1,5 @@
 const path = require("path");
+const allure = require('allure-commandline')
 
 exports.config = {
   runner: "local",
@@ -18,8 +19,40 @@ exports.config = {
   connectionRetryCount: 3,
 
   framework: "mocha",
-  reporters: ["spec"],
 
+  reporters: [['allure', {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: false,
+      disableWebdriverScreenshotsReporting: false,
+  }]],
+
+  afterTest: async function(test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+        await browser.takeScreenshot();
+    }
+  },  
+
+    onComplete: function() {
+        const reportError = new Error('Não foi possível gerar o relatório do Allure.');
+        const generation = allure(['generate', 'allure-results', '--clean'])
+        return new Promise((resolve, reject) => {
+            const generationTimeout = setTimeout(
+                () => reject(reportError),
+                5000)
+
+            generation.on('exit', function(exitCode) {
+                clearTimeout(generationTimeout)
+
+                if (exitCode !== 0) {
+                    return reject(reportError)
+                }
+
+                console.log('Relatório do Allure gerado com sucesso!')
+                resolve()
+            })
+        })
+    },
+ 
   mochaOpts: {
     ui: "bdd",
     timeout: 60000,
